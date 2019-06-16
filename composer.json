@@ -1,5 +1,6 @@
 {
     "require": {
-        "imangazaliev/didom": "^1.14"
+        "imangazaliev/didom": "^1.14",
+        "guzzlehttp/guzzle": "^6.3"
     }
 }
