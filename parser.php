@@ -15,7 +15,7 @@ foreach ($download_list as $download_record) {
     $url_query_string = shell_exec("node js_library.js '$query_json'");
 
 
-    $url = '要爬的網頁';
+    $url = "/index.php?act=Archive/search/$url_query_string";
 
     $client = new Client([
         'cookies' => true, // client 要紀錄 cookie，不然總督府網站不給你爬會要你 302
