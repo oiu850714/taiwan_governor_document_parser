@@ -50,7 +50,7 @@ foreach ($download_list as $download_record) {
         // 隸屬測名
         $subject_book = trim($result_fields[1]->find('.field_value')[0]->text());
         // 檔案階層
-        $subject_filepath = trim($result_fields[2]->find('.field_value')[0]->find('search')[0]->text());
+        $subject_filepath = trim($result_fields[2]->find('.field_value')[0]->text());
         // 本件日期
         $subject_date_range = trim($result_fields[3]->find('.field_value')[0]->text());
         // 密等/解密紀錄
