@@ -1,6 +1,7 @@
 <?php
 include __DIR__ . '/vendor/autoload.php';
 
+$download_list = include __DIR__ . '/download_list';
 
 use DiDom\Document;
 use GuzzleHttp\Client;
