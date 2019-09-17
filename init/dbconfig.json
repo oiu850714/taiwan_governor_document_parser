@@ -1,0 +1,10 @@
+{
+    "production": {
+        "host": "",
+        "username": "",
+        "port": "3306",
+        "password": "",
+        "dbname": "taiwan_governor_document",
+        "charset": "utf8mb4"
+    }
+}
