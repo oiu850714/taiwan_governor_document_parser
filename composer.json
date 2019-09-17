@@ -3,5 +3,8 @@
         "imangazaliev/didom": "^1.14",
         "guzzlehttp/guzzle": "^6.3",
         "illuminate/database": "^6.0"
+    },
+    "autoload": {
+        "classmap": ["Models/"]
     }
 }
