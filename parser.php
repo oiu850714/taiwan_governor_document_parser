@@ -23,11 +23,7 @@ use App\Models\TaiwanGovernorDocument\DownloadList;
         'base_uri' => 'http://archives.th.gov.tw',
     ]);
 
-    for ($search_range_start = 1; $search_range_start < $list_count; $search_range_start += 100) {
-        $search_range_end = $search_range_start + 100;
-        $url_with_range = "$url/$search_range_start-$search_range_end";
-
-    $response = $client->request('GET', $url_with_range); // 觸發 302 設定 Cookie 並拿搜尋頁面餵給 DiDom
+    $response = $client->request('GET', $url); // 觸發 302 設定 Cookie 並拿搜尋頁面餵給 DiDom
     // 這個網頁沒有帶 cookie 就會 302
     // DiDom 看起來好像沒有可以帶 Cookie 的選項，所以 workaround 把 guzzle result 餵給他
     $body = (string) $response->getBody();
@@ -124,5 +120,4 @@ use App\Models\TaiwanGovernorDocument\DownloadList;
         file_put_contents("$save_path/$subject_number-$subject.zip", $body);
 
         echo "第三步: guzzle body size: " . strlen($body) . "\n";
-    }
     }
