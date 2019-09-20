@@ -21,6 +21,7 @@ use App\Models\TaiwanGovernorDocument\DownloadList;
     $client = new Client([
         'cookies' => true, // client 要紀錄 cookie，不然總督府網站不給你爬會要你 302
         'base_uri' => 'http://archives.th.gov.tw',
+        'connect_timeout' => 30,
     ]);
 
     $response = $client->request('GET', $url); // 觸發 302 設定 Cookie 並拿搜尋頁面餵給 DiDom
