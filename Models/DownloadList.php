@@ -7,10 +7,9 @@ class DownloadList extends Model
 {
     protected $table = 'download_lists';
     protected $connection = 'default';
+    public $timestamps = false;
 
     protected $fillable = [
-        'name',
-        'url',
         'file_path',
         'start_index',
         'count',
