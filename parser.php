@@ -16,7 +16,7 @@ use App\Models\TaiwanGovernorDocument\DownloadList;
     $url_query_string = shell_exec("node Libraries/js_library.js '$query_json'");
 
 
-    $url = "/index.php?act=Archive/search/$url_query_string";
+    $url = "/index.php?act=Archive/search/$url_query_string/$start_index-$list_count";
 
     $client = new Client([
         'cookies' => true, // client 要紀錄 cookie，不然總督府網站不給你爬會要你 302
