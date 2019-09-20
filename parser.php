@@ -4,9 +4,10 @@ include __DIR__ . '/init/init.php';
 use DiDom\Document;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Exception\RequestException;
 use App\Models\TaiwanGovernorDocument\DownloadList;
 
-
+try {
     $download_record = DownloadList::first();
     $download_file_path = $download_record->file_path;
     $start_index = $download_record->start_index;
@@ -122,3 +123,5 @@ use App\Models\TaiwanGovernorDocument\DownloadList;
 
         echo "第三步: guzzle body size: " . strlen($body) . "\n";
     }
+} catch (\RequestException $e) {
+}
