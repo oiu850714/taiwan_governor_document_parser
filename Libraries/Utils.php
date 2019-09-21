@@ -1,7 +1,11 @@
 <?php
+namespace Libraries;
+
 use App\Models\TaiwanGovernorDocument\DownloadList;
 
-function getArchiveUrl(DownloadList $download_list) {
+class Utils
+{
+public static function getArchiveUrl(DownloadList $download_list) {
 
     $download_file_path = $download_list->file_path;
     $start_index = $download_list->start_index;
@@ -14,4 +18,5 @@ function getArchiveUrl(DownloadList $download_list) {
     $url = "/index.php?act=Archive/search/$url_query_string/$start_index-$list_count";
 
     return $url;
+}
 }
