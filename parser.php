@@ -2,8 +2,7 @@
 include __DIR__ . '/init/init.php';
 
 use DiDom\Document;
-use GuzzleHttp\Client;
-use GuzzleHttp\Cookie\CookieJar;
+use Libraries\ApiClient;
 use GuzzleHttp\Exception\RequestException;
 use App\Models\TaiwanGovernorDocument\DownloadList;
 
@@ -15,16 +14,8 @@ try {
     $archive_url = getArchiveUrl($download_record);
 
 
-    $client = new Client([
-        'cookies' => true, // client 要紀錄 cookie，不然總督府網站不給你爬會要你 302
-        'base_uri' => 'http://archives.th.gov.tw',
-        'connect_timeout' => 30,
-    ]);
-
-    $response = $client->request('GET', $archive_url); // 觸發 302 設定 Cookie 並拿搜尋頁面餵給 DiDom
-    // 這個網頁沒有帶 cookie 就會 302
-    // DiDom 看起來好像沒有可以帶 Cookie 的選項，所以 workaround 把 guzzle result 餵給他
-    $body = (string) $response->getBody();
+    $client = new ApiClient();
+    $body = $client->getArchiveUrlHtmlBody($archive_url);
 
     $document = new Document($body);
     // 搜尋結果都在 .result_header 內
@@ -75,46 +66,15 @@ try {
         }
 
         // 第一步: 換 reource key
-        $response = $client->request('POST', '/index.php', [
-            'form_params' => [
-                'act' => "Display/initial/$subject_download_acc_key",
-            ],
-        ]);
-
-        $body_array = json_decode($response->getBody(), true);
-        $resource_key = $body_array['data']['resouse']; // 注意 key 是 resouse, 他們 API 拼錯了
+        $resource_key = $client->getResourceKey($subject_download_acc_key);
         echo "第一步: resource_key: $resource_key\n";
 
-
-        // 這兩段是要觸發服務內部自己 built 出一個可下載的檔案 LOL
-        // 感覺需要戳頁面，這個 key 才有辦法換到 download key...
-        $response = $client->request('GET', "/index.php?act=Display/image/$resource_key");
-
-        // 跟據 canvas 頁面的 JS 判斷，應該要打下面的 API 才會 build..
-        $response = $client->request('POST', '/index.php', [
-            'form_params' => [
-                'act' => "Display/built/$resource_key",
-            ],
-        ]);
-
         // 第二步: 換 download key
-        $response = $client->request('POST', '/index.php', [
-            'form_params' => [
-                'act' => "Display/package/$resource_key",
-            ],
-        ]);
-
-        $body_array = json_decode($response->getBody(), true);
-        $download_key = $body_array['data'];
-        if (empty($download_key)) {
-            echo "這一件目前無法下載!\n";
-            continue;
-        }
+        $download_key = $client->getDownloadKey($resource_key);
         echo "第二步: download_key: $download_key\n";
 
         // 第三部: 下載
-        $response = $client->request('GET', "/index.php?act=Display/download/$download_key");
-        $body = (string) $response->getBody();
+        $body = $client->getArchive($download_key);
         file_put_contents("$save_path/$subject_number-$subject.zip", $body);
 
         echo "第三步: guzzle body size: " . strlen($body) . "\n";
