@@ -8,7 +8,9 @@ use GuzzleHttp\Exception\RequestException;
 use App\Models\TaiwanGovernorDocument\DownloadList;
 
 try {
-    $download_record = DownloadList::first();
+    if (!$download_record = DownloadList::first()) {
+        return;
+    }
 
     $url = getArchiveUrl($download_record);
 
