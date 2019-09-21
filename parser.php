@@ -7,7 +7,6 @@ use Libraries\Utils;
 use GuzzleHttp\Exception\RequestException;
 use App\Models\TaiwanGovernorDocument\DownloadList;
 
-try {
     if (!$download_record = DownloadList::first()) {
         return;
     }
@@ -66,6 +65,7 @@ try {
             mkdir($save_path, 0777, true);
         }
 
+        try {
         // 第一步: 換 reource key
         $resource_key = $client->getResourceKey($subject_download_acc_key);
         echo "第一步: resource_key: $resource_key\n";
@@ -79,6 +79,6 @@ try {
         file_put_contents("$save_path/$subject_number-$subject.zip", $body);
 
         echo "第三步: guzzle body size: " . strlen($body) . "\n";
+        } catch (\RequestException $e) {
+        }
     }
-} catch (\RequestException $e) {
-}
