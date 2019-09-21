@@ -6,6 +6,7 @@ use Libraries\ApiClient;
 use Libraries\Utils;
 use GuzzleHttp\Exception\RequestException;
 use App\Models\TaiwanGovernorDocument\DownloadList;
+use App\Models\TaiwanGovernorDocument\ErrorSubject;
 
 if (!$download_record = DownloadList::first()) {
     return;
@@ -79,6 +80,13 @@ foreach($result_headers as $result_header) {
         file_put_contents("$save_path/$subject_number-$subject.zip", $body);
 
         echo "第三步: guzzle body size: " . strlen($body) . "\n";
-    } catch (\RequestException $e) {
+    } catch (\Exception $e) {
+        ErrorSubject::create([
+            'subject' => $subject,
+            'subject_number' => $subject_number,
+            'book' => $subject_book,
+            'file_path' => $subject_filepath,
+            'error_message' => $e->getMessage(),
+        ]);
     }
 }
