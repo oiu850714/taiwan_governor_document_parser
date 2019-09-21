@@ -3,6 +3,7 @@ include __DIR__ . '/init/init.php';
 
 use DiDom\Document;
 use Libraries\ApiClient;
+use Libraries\Utils;
 use GuzzleHttp\Exception\RequestException;
 use App\Models\TaiwanGovernorDocument\DownloadList;
 
@@ -11,7 +12,7 @@ try {
         return;
     }
 
-    $archive_url = getArchiveUrl($download_record);
+    $archive_url = Utils::getArchiveUrl($download_record);
 
 
     $client = new ApiClient();
