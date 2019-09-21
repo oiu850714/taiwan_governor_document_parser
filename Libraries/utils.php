@@ -1,6 +1,7 @@
 <?php
+use App\Models\TaiwanGovernorDocument\DownloadList;
 
-function getArchiveUrl($download_record) {
+function getArchiveUrl(DownloadList $download_record) {
 
     $download_file_path = $download_record->file_path;
     $start_index = $download_record->start_index;
