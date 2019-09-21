@@ -66,19 +66,19 @@ use App\Models\TaiwanGovernorDocument\DownloadList;
         }
 
         try {
-        // 第一步: 換 reource key
-        $resource_key = $client->getResourceKey($subject_download_acc_key);
-        echo "第一步: resource_key: $resource_key\n";
+            // 第一步: 換 reource key
+            $resource_key = $client->getResourceKey($subject_download_acc_key);
+            echo "第一步: resource_key: $resource_key\n";
 
-        // 第二步: 換 download key
-        $download_key = $client->getDownloadKey($resource_key);
-        echo "第二步: download_key: $download_key\n";
+            // 第二步: 換 download key
+            $download_key = $client->getDownloadKey($resource_key);
+            echo "第二步: download_key: $download_key\n";
 
-        // 第三部: 下載
-        $body = $client->getArchive($download_key);
-        file_put_contents("$save_path/$subject_number-$subject.zip", $body);
+            // 第三部: 下載
+            $body = $client->getArchive($download_key);
+            file_put_contents("$save_path/$subject_number-$subject.zip", $body);
 
-        echo "第三步: guzzle body size: " . strlen($body) . "\n";
+            echo "第三步: guzzle body size: " . strlen($body) . "\n";
         } catch (\RequestException $e) {
         }
     }
