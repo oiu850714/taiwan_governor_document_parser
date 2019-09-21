@@ -48,17 +48,6 @@ foreach($result_headers as $result_header) {
     $subject_permission_level = trim($result_fields[4]->find('.field_value')[0]->text());
     // acc_key
     $subject_download_acc_key = trim($result_fields[5]->find('.field_value')[0]->find('.option')[0]->getAttribute('acckey'));
-    echo
-        "=============== 每筆紀錄 =================\n" .
-        "件名: $subject\n" .
-        "典藏號: $subject_number\n" .
-        "隸屬測名: $subject_book\n" .
-        "搜尋的檔案階層: $subject_filepath\n" .
-        "本件日期: $subject_date_range\n" .
-        "密等/解密紀錄: $subject_permission_level\n" .
-        "acc_key: $subject_download_acc_key\n" .
-        "=============== end =======================\n"
-    ;
 
     $initial_path = '/mnt/c/Users/oiu85/Desktop/database';
     $save_path = "$initial_path/$subject_filepath/$subject_book/";
@@ -69,17 +58,13 @@ foreach($result_headers as $result_header) {
     try {
         // 第一步: 換 reource key
         $resource_key = $client->getResourceKey($subject_download_acc_key);
-        echo "第一步: resource_key: $resource_key\n";
 
         // 第二步: 換 download key
         $download_key = $client->getDownloadKey($resource_key);
-        echo "第二步: download_key: $download_key\n";
 
         // 第三部: 下載
         $body = $client->getArchive($download_key);
         file_put_contents("$save_path/$subject_number-$subject.zip", $body);
-
-        echo "第三步: guzzle body size: " . strlen($body) . "\n";
     } catch (\Exception $e) {
         ErrorSubject::create([
             'subject' => $subject,
