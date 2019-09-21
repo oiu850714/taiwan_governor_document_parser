@@ -8,7 +8,7 @@ use GuzzleHttp\Exception\RequestException;
 use App\Models\TaiwanGovernorDocument\DownloadList;
 use App\Models\TaiwanGovernorDocument\ErrorSubject;
 
-if (!$download_record = DownloadList::first()) {
+if (!$download_record = DownloadList::where('finished_at', '=', 0)->first()) {
     return;
 }
 
@@ -75,3 +75,5 @@ foreach($result_headers as $result_header) {
         ]);
     }
 }
+
+$download_record->update(['finished_at' => time()]);
