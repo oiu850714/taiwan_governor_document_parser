@@ -45,6 +45,10 @@ class ApiClient
         $body_array = json_decode($response->getBody(), true);
         $resource_key = $body_array['data']['resouse']; // 注意 key 是 resouse, 他們 API 拼錯了
 
+        if (empty($resource_key) or !is_string($resource_key)) {
+            throw new \Exception('resource key 換取 失敗');
+        }
+
         return $resource_key;
     }
 
@@ -69,6 +73,10 @@ class ApiClient
         $body_array = json_decode($response->getBody(), true);
         $download_key = $body_array['data'];
 
+        if (empty($download_key) or !is_string($download_key)) {
+            throw new \Exception('download key 換取 失敗');
+        }
+
         return $download_key;
     }
 
@@ -77,6 +85,10 @@ class ApiClient
         // 第三部: 下載
         $response = $this->getClient()->request('GET', "/index.php?act=Display/download/$download_key");
         $body = (string) $response->getBody();
+
+        if (count($body) < 10000) {
+           throw new \Exception('檔案 body size 過小可能有問題');
+        }
 
         return $body;
     }
