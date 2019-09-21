@@ -12,7 +12,7 @@ try {
         return;
     }
 
-    $url = getArchiveUrl($download_record);
+    $archive_url = getArchiveUrl($download_record);
 
 
     $client = new Client([
@@ -21,7 +21,7 @@ try {
         'connect_timeout' => 30,
     ]);
 
-    $response = $client->request('GET', $url); // 觸發 302 設定 Cookie 並拿搜尋頁面餵給 DiDom
+    $response = $client->request('GET', $archive_url); // 觸發 302 設定 Cookie 並拿搜尋頁面餵給 DiDom
     // 這個網頁沒有帶 cookie 就會 302
     // DiDom 看起來好像沒有可以帶 Cookie 的選項，所以 workaround 把 guzzle result 餵給他
     $body = (string) $response->getBody();
