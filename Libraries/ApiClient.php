@@ -86,8 +86,8 @@ class ApiClient
         $response = $this->getClient()->request('GET', "/index.php?act=Display/download/$download_key");
         $body = (string) $response->getBody();
 
-        if (mb_strlen($body, 'UTF-8') < 10000) {
-           throw new \Exception('檔案 body size 過小可能有問題');
+        if (($body_size = mb_strlen($body, 'UTF-8')) < 10000) {
+           throw new \Exception("檔案 body size $body_size 過小可能有問題");
         }
 
         return $body;
