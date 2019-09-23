@@ -8,9 +8,12 @@ use GuzzleHttp\Exception\RequestException;
 use App\Models\TaiwanGovernorDocument\DownloadList;
 use App\Models\TaiwanGovernorDocument\ErrorSubject;
 
-if (!$download_record = DownloadList::where('finished_at', '=', 0)->first()) {
+if (!$download_record = DownloadList::where('finished_at', '=', 0)->where('status', DownloadList::STATUS_NONACTIVE)->first()) {
     return;
 }
+
+$download_record->status = DownloadList::STATUS_ACTIVE;
+$download_record->save();
 
 $archive_url = Utils::getArchiveUrl($download_record);
 
@@ -76,4 +79,6 @@ foreach($result_headers as $result_header) {
     }
 }
 
+$download_record->status = DownloadList::STATUS_FINISHED;
+$download_record->save();
 $download_record->update(['finished_at' => time()]);
