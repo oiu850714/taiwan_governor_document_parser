@@ -13,6 +13,7 @@ class DownloadList extends Model
         'file_path',
         'start_index',
         'count',
+        'status',
         'finished_at',
     ];
 }
